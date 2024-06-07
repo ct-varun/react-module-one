@@ -1,0 +1,48 @@
+.chatWindow {
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 12px;
+  padding-bottom: 40px;
+}
+
+.message {
+  margin-top: 40px;
+  max-width: 90%;
+  border-radius: 26px;
+  padding: 16px 14px;
+  position: relative;
+}
+
+.message:first-of-type {
+  margin-top: 10px;
+}
+
+.message > .datetime {
+  font-size: 12px;
+  position: absolute;
+  bottom: -18px;
+  color: #545454;
+}
+
+.bot {
+  margin-right: auto;
+  border-bottom-left-radius: 0px;
+  background: #2196f3;
+  color: #fff;
+}
+
+.user {
+  margin-left: auto;
+  border-bottom-right-radius: 0px;
+  background: white;
+  color: #545454;
+  border: 1px solid gainsboro;
+}
+
+.bot > .datetime {
+  left: 15px;
+}
+
+.user > .datetime {
+  right: 15px;
+}
