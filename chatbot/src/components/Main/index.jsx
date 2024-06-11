@@ -1,10 +1,10 @@
 import React from "react";
-import style from "./footer.module.css";
-import Messages from "../messages/messages";
+import Messages from "../messages/index.jsx";
+import Footer from "../Footer/index.jsx";
 import { useEffect, useState, useRef } from "react";
-import * as utilities from "../../utility/utilities.jsx";
+import * as utilities from "../../utility/index.jsx";
 
-export default function Footer() {
+export default function Main() {
   const date = new Date();
   const months = [
     "January",
@@ -20,7 +20,6 @@ export default function Footer() {
     "November",
     "December",
   ];
-  const inputRef = useRef("");
   const [myObj, setMyObj] = useState([
     {
       text: [{ label: "bring it on", figure: "" }],
@@ -30,21 +29,19 @@ export default function Footer() {
       }, ${date.getFullYear()}`,
     },
   ]);
-  const [indicator, setIndicator] = useState(0);
-
-  const handleEnter = () => {
+  const handleEnter = (value) => {
     setMyObj((previousMyObj) => {
       return [
         ...previousMyObj,
         {
-          text: inputRef.current.value,
+          text: value,
           id: "user",
           date: `${date.getDate()} ${
             months[date.getMonth()]
           }, ${date.getFullYear()}`,
         },
         {
-          text: handleReply(inputRef.current.value),
+          text: handleReply(value),
           id: "bot",
           date: `${date.getDate()} ${
             months[date.getMonth()]
@@ -52,31 +49,27 @@ export default function Footer() {
         },
       ];
     });
-    setIndicator(1);
-    Timeout();
   };
 
-  const handleClick = (e) => {
+  const handleClick = (e, value) => {
     e.preventDefault();
     setMyObj((previousMyObj) => [
       ...previousMyObj,
       {
-        text: inputRef.current.value,
+        text: value,
         id: "user",
         date: `${date.getDate()} ${
           months[date.getMonth()]
         }, ${date.getFullYear()}`,
       },
       {
-        text: handleReply(inputRef.current.value),
+        text: handleReply(value),
         id: "bot",
         date: `${date.getDate()} ${
           months[date.getMonth()]
         }, ${date.getFullYear()}`,
       },
     ]);
-    setIndicator(1);
-    Timeout();
   };
 
   const handleReply = (input) => {
@@ -104,63 +97,29 @@ export default function Footer() {
     return result;
   };
 
-  const timeoutId = useRef(0);
-
-  useEffect(() => {
-    inputRef.current.focus();
-  }, []);
-
-  useEffect(() => {
-    Timeout();
-  }, []);
-
-  useEffect(() => {
-    inputRef.current.value = "";
-  }, [indicator]);
-
-  function Timeout() {
-    if (timeoutId.current) {
-      clearTimeout(timeoutId.current);
-    }
-    timeoutId.current = setTimeout(() => {
-      setMyObj((previousMyObj) => {
-        return [
-          ...previousMyObj,
-          {
-            text: [{ label: "are you still there?", figure: "" }],
-            id: "bot",
-            date: `${date.getDate()} ${
-              months[date.getMonth()]
-            }, ${date.getFullYear()}`,
-          },
-        ];
-      });
-    }, 5000);
-  }
+  const userInactiveMessage = () => {
+    setMyObj((previousMyObj) => {
+      return [
+        ...previousMyObj,
+        {
+          text: [{ label: "are you still there?", figure: "" }],
+          id: "bot",
+          date: `${date.getDate()} ${
+            months[date.getMonth()]
+          }, ${date.getFullYear()}`,
+        },
+      ];
+    });
+  };
 
   return (
     <>
       <Messages message={myObj} />
-      <div className={style.footer}>
-        <input
-          type="text"
-          name="inputtext"
-          id="messageInput"
-          ref={inputRef}
-          placeholder="Enter the text here..."
-          onKeyPress={(e) => {
-            if (e.code == "Enter") {
-              handleEnter();
-            }
-          }}
-          onChange={() => {
-            Timeout();
-          }}
-        />
-        <button type="reset" onClick={handleClick}>
-          Send
-        </button>
-      </div>
+      <Footer
+        handleClick={handleClick}
+        handleEnter={handleEnter}
+        userInactiveMessage={userInactiveMessage}
+      />
     </>
   );
 }

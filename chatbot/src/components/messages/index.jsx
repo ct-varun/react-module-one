@@ -5,19 +5,16 @@ import { useEffect, useRef } from "react";
 export default function Messages({ message }) {
   //   console.log(message.map((item) => item.text));
   const chatWindowRef = useRef("");
-  function scrollToBottom() {
+  useEffect(() => {
     if (chatWindowRef.current) {
-      setTimeout(() => {
-        const chatWindow = chatWindowRef.current;
-        chatWindow.scrollTop = chatWindow.scrollHeight;
-        // console.log(
-        //   "hello this is the current scroll height",
-        //   chatWindowRef.current.scrollHeight
-        // );
-      }, 100);
+      const chatWindow = chatWindowRef.current;
+      chatWindow.scrollTop = chatWindow.scrollHeight;
+      // console.log(
+      //   "hello this is the current scroll height",
+      //   chatWindowRef.current.scrollHeight
+      // );
     }
-  }
-  scrollToBottom();
+  }, [message]);
   return (
     <>
       <div ref={chatWindowRef} className={style.chatWindow}>
